@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <script src="storeget.js"></script>
+    <script>
+        async function process() {
+            resultBox.innerText = "Looking...";
+
+            downloads.innerHTML = "";
+
+            var links = await getLinks(url.value, platform.value);
+            var amount = Object.entries(links).length;
+
+            if (amount == 0) {
+                resultBox.innerText = "There are no available downloads for the " + platform.value + " platform, or this package does not exist.";
+            } else {
+                getAnchors(links).then((anchors) => {
+                    Array.from(anchors).forEach((anchor) => {
+                        downloads.appendChild(anchor);
+                        downloads.innerHTML += "<br />";
+                    });
+                });
+
+                resultBox.innerText = "Found " + amount + " files. Download and install all of them.";
+            }
+        }
+    </script>
+</head>
+
+<body>
+    <input type="text" id="url" />
+    <select id="platform">
+        <option>x86</option>
+        <option>x64</option>
+        <option selected>arm</option>
+        <option>arm64</option>
+    </select>
+    <button onclick="process()">Process</button>
+    <p id="result"></p>
+    <div id="downloads"></div>
+</body>
+
+<footer>
+    <script>
+        var resultBox = document.querySelector("#result");
+        var url = document.querySelector("#url");
+        var platform = document.querySelector("#platform");
+        var downloads = document.querySelector("#downloads");
+    </script>
+</footer>
+
+</html>
